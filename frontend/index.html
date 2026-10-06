@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Password Strength Analyzer</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Password Strength Analyzer</h1>
+      <p class="tagline">Checks run on this machine. Your password is never saved, logged or sent to another service.</p>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="analyzer" aria-selected="true">Analyzer</button>
+      <button role="tab" data-tab="generator" aria-selected="false">Generator</button>
+      <button role="tab" data-tab="learn" aria-selected="false">Learn</button>
+      <button role="tab" data-tab="dashboard" aria-selected="false">Dashboard</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ANALYZER -->
+    <section id="tab-analyzer" class="tab">
+      <div class="grid">
+        <div class="panel">
+          <label for="password" class="field-label">Password to test</label>
+          <div class="input-row">
+            <input id="password" type="password" autocomplete="off" autocapitalize="off" autocorrect="off"
+                   spellcheck="false" maxlength="128" placeholder="Type a demo password">
+            <button id="toggle" type="button" class="ghost" aria-pressed="false">Show password</button>
+          </div>
+          <p class="hint">Use made-up passwords for experiments, never one you use for a real account.</p>
+
+          <div class="meter-wrap" aria-live="polite">
+            <div class="score-line"><span id="score" class="score">&ndash;</span><span class="of">/ 100</span>
+              <span id="label" class="label" data-level="none">Waiting for input</span></div>
+            <div class="meter" data-level="none"><div id="bar" class="bar"></div>
+              <i style="left:20%"></i><i style="left:40%"></i><i style="left:60%"></i><i style="left:80%"></i></div>
+            <div id="policy" class="policy hidden"></div>
+          </div>
+
+          <details class="context">
+            <summary>Check against personal details (optional, compared locally, never stored)</summary>
+            <div class="ctx-grid">
+              <label>First name<input id="ctx-name" type="text" autocomplete="off" maxlength="64"></label>
+              <label>Birth year<input id="ctx-year" type="text" inputmode="numeric" autocomplete="off" maxlength="4"></label>
+              <label>College / company<input id="ctx-org" type="text" autocomplete="off" maxlength="64"></label>
+            </div>
+            <p class="hint">Use demo values only.</p>
+          </details>
+
+          <div class="actions">
+            <button id="record" type="button" class="primary" disabled>Add result to demo dashboard</button>
+            <span id="record-note" class="hint"></span>
+          </div>
+        </div>
+
+        <div class="panel results">
+          <div class="cols">
+            <div><h2>Working in your favour</h2><ul id="strengths" class="list good"></ul></div>
+            <div><h2>Weakening it</h2><ul id="findings" class="list bad"></ul></div>
+          </div>
+          <h2>What to do</h2>
+          <ul id="suggestions" class="list"></ul>
+          <details class="entropy">
+            <summary>How the score and entropy estimate were calculated</summary>
+            <table id="breakdown"></table>
+            <p id="entropy-text"></p>
+            <p class="hint" id="entropy-note"></p>
+            <p class="hint">Score bands are project-defined teaching bands, not a universal security standard.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- GENERATOR -->
+    <section id="tab-generator" class="tab hidden">
+      <div class="panel narrow">
+        <h2>Generate a random password</h2>
+        <p>Created with the operating system's secure random source. It is shown once, then forgotten. Put it in a password manager.</p>
+        <div class="ctx-grid">
+          <label>Length
+            <select id="gen-length"><option>16</option><option selected>20</option><option>24</option></select></label>
+          <label class="check"><input id="gen-upper" type="checkbox" checked> Uppercase</label>
+          <label class="check"><input id="gen-lower" type="checkbox" checked> Lowercase</label>
+          <label class="check"><input id="gen-digits" type="checkbox" checked> Numbers</label>
+          <label class="check"><input id="gen-symbols" type="checkbox" checked> Symbols</label>
+        </div>
+        <div class="actions"><button id="gen-btn" class="primary" type="button">Generate</button>
+          <button id="gen-copy" class="ghost" type="button" disabled>Copy</button>
+          <button id="gen-analyze" class="ghost" type="button" disabled>Analyze it</button></div>
+        <output id="gen-output" class="generated" aria-live="polite">Press Generate</output>
+        <p id="gen-msg" class="hint"></p>
+      </div>
+    </section>
+
+    <!-- LEARN -->
+    <section id="tab-learn" class="tab hidden">
+      <div class="panel narrow prose">
+        <h2>Password vs passphrase</h2>
+        <p>A passphrase is several unrelated words, such as the fictional example below. Length does most of the work, and it is easier to remember than a short jumble of symbols.</p>
+        <p class="example">lantern-orbit-pickle-meadow-quartz <span>Example only. Never reuse it.</span></p>
+        <p>The words must be chosen at random (by a tool or dice), not picked because they feel meaningful. Song lyrics, quotes and famous phrases are guessable.</p>
+        <h2>Why rules like "one capital, one number, one symbol" are not enough</h2>
+        <p>Password123! satisfies every composition rule and is still one of the first patterns tried. Strength comes from length, unpredictability, avoiding common passwords and avoiding personal details.</p>
+        <h2>10 password security rules</h2>
+        <ol>
+          <li><b>Use a unique password for every account.</b> One breach should not open the rest.</li>
+          <li><b>Prefer length.</b> Long passwords and passphrases beat short complex ones.</li>
+          <li><b>Avoid predictable information.</b> Names, birthdays, pets, teams and places.</li>
+          <li><b>Avoid common passwords.</b> They are guessed first.</li>
+          <li><b>Never reuse passwords.</b> Credential stuffing replays leaked logins on other sites.</li>
+          <li><b>Use a password manager.</b> It creates and remembers unique passwords for you.</li>
+          <li><b>Turn on MFA.</b> A stolen password alone is then not enough.</li>
+          <li><b>Never share passwords.</b> No genuine support team asks for yours.</li>
+          <li><b>Watch for phishing.</b> Check the address before you type. A fake page defeats any strong password.</li>
+          <li><b>Change a password when compromise is suspected or confirmed.</b> Routine forced changes without a reason are not recommended.</li>
+        </ol>
+        <h2>Storing passwords (for developers)</h2>
+        <p>Sites should never store plaintext passwords. They store a salted hash made with a slow password-hashing function such as Argon2id, bcrypt, scrypt or PBKDF2. Hashing is one-way verification; encryption is reversible. A fast general-purpose hash alone is not suitable for passwords.</p>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="tab hidden">
+      <div class="panel">
+        <div id="dash-empty" class="hint hidden">No analyses recorded yet. Press "Add result to demo dashboard" on the Analyzer tab, or run <code>python -m backend.utils.seed_demo</code> to load synthetic demo data.</div>
+        <div id="dash-cards" class="cards"></div>
+        <p class="hint">Only scores, classifications, lengths and weakness types are stored. No passwords.</p>
+        <div class="charts">
+          <figure><figcaption>Strength distribution</figcaption><canvas id="c-strength"></canvas></figure>
+          <figure><figcaption>Score distribution</figcaption><canvas id="c-score"></canvas></figure>
+          <figure><figcaption>Most common weaknesses</figcaption><canvas id="c-weak"></canvas></figure>
+          <figure><figcaption>Password length distribution</figcaption><canvas id="c-length"></canvas></figure>
+          <figure><figcaption>Pattern detection frequency</figcaption><canvas id="c-pattern"></canvas></figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Educational project. A score is an estimate from a simple model, not a guarantee. Strength is one part of account security; MFA matters too.</footer>
+
+  <script src="js/vendor/chart.umd.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
