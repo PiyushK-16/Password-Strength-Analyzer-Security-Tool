@@ -120,4 +120,4 @@ Password security concepts, entropy and its limits, pattern detection, secure ra
 Educational project. Do not type real passwords into any tool you did not audit. Scores are estimates, not guarantees.
 
 ## Author
-Your Name - Cybersecurity student. LinkedIn: <link>
+Piyush K. Ahirwar- Cybersecurity student. [LinkedIn](https://www.linkedin.com/in/piyush-k-ahirwar-658633261)
